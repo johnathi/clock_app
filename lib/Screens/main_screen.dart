@@ -49,19 +49,19 @@ class _MainScreenState extends State<MainScreen> {
             showUnselectedLabels: false,
             items:  [
               BottomNavigationBarItem(
-                icon: Icon(Icons.access_time,color: currentPageIndex==0?Colors.black : Colors.grey),
+                icon: Icon(Icons.access_time,color: currentPageIndex==0?Colors.black : Colors.grey[700]),
                 label: 'Clock',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.alarm,color: currentPageIndex==1?Colors.black : Colors.grey),
+                icon: Icon(Icons.alarm,color: currentPageIndex==1?Colors.black : Colors.grey[700]),
                 label: 'Alarm',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.timer,color: currentPageIndex==2?Colors.black : Colors.grey),
+                icon: Icon(Icons.timer,color: currentPageIndex==2?Colors.black : Colors.grey[700]),
                 label: 'Stopwatch',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.hourglass_bottom,color: currentPageIndex==3?Colors.black : Colors.grey),
+                icon: Icon(Icons.hourglass_bottom,color: currentPageIndex==3?Colors.black : Colors.grey[700]),
                 label: 'Timer',
               ),
             ],

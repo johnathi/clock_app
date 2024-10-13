@@ -51,7 +51,17 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   void _flagTime() {
     setState(() {
       _flags.add(_formatTime(_stopwatch.elapsedMilliseconds));
+      // _flags.insert(0, _formatTime(_stopwatch.elapsedMilliseconds));
     });
+  }
+
+  int _parseTime(String formattedTime) {
+    var parts = formattedTime.split(RegExp(r'[:.]'));
+    var hours = int.parse(parts[0]);
+    var minutes = int.parse(parts[1]);
+    var seconds = int.parse(parts[2]);
+    var milliseconds = int.parse(parts[3]);
+    return (hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds;
   }
 
   String _formatTime(int milliseconds) {
@@ -83,41 +93,98 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 40,),
           Text(
             _formatTime(_stopwatch.elapsedMilliseconds),
-            style: TextStyle(fontSize: 48.0),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: _stopwatch.isRunning ? _stopStopwatch : _startStopwatch,
-                child: Text(_stopwatch.isRunning ? 'Stop' : 'Start'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: _resetStopwatch,
-                child: Text('Reset'),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: _flagTime,
-                child: Text('Flag'),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _flags.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_flags[index]),
-                );
-              },
+            style: GoogleFonts.kanit(
+              color: Color(0xFFEAECFF),
+              fontSize: 48,
+              fontWeight: FontWeight.w400,
             ),
           ),
+          Center(
+            child: SizedBox(
+              width: MediaQuery.sizeOf(context).width*.95,
+              height: MediaQuery.sizeOf(context).height*.4,
+              child: ListView.builder(
+                itemCount: _flags.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Text(
+                          '${index + 1}. ',
+                          style: GoogleFonts.kanit(
+                          color: Color(0xFFEAECFF),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                        ),),
+
+                        SizedBox(width:10),
+
+                        Text(_flags[index],
+                          style: GoogleFonts.kanit(
+                          color: Color(0xFFEAECFF),
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600,
+                        ),),
+
+                        SizedBox(width:10),
+
+                        Text(
+                          index == 0
+                              ? '${_flags[index]}'
+                              : '+ ${_formatTime(_parseTime(_flags[index]) - _parseTime(_flags[index - 1]))}',
+                          style: GoogleFonts.kanit(
+                            color: Color(0xFFEAECFF),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: _stopwatch.isRunning ? _stopStopwatch : _startStopwatch,
+                    child: Container(
+                        margin:  EdgeInsets.all(5),
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color(0xFFEAECFF),
+                        ),
+                        child: Icon(_stopwatch.isRunning ? Icons.pause : Icons.play_arrow,size: 30,))),
+                        // child: Text(_stopwatch.isRunning ? 'Stop' : 'Start'))),
+                SizedBox(width: 50),
+                GestureDetector(
+                  onTap: _stopwatch.isRunning ?_flagTime : _resetStopwatch,
+                  child: Container(
+                    margin:  EdgeInsets.all(5),
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Color(0xFFEAECFF),
+                    ),
+                    child: Icon(_stopwatch.isRunning ? Icons.flag :Icons.stop,size: 30,),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
         ],
       ),
     );
